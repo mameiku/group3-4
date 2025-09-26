@@ -1,0 +1,318 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0" version="28.2.3">
+  <diagram name="ページ1" id="hABAW-cYDgpt3VnozLcu">
+    <mxGraphModel dx="1017" dy="460" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="rImW4XdA1xHek7s_RNNG-1" value="ユーザー" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="4" y="40" width="40" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-2" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="208" y="80.5" as="sourcePoint" />
+            <mxPoint x="268" y="81" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-4" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="46" y="80" as="sourcePoint" />
+            <mxPoint x="106" y="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-5" value="新規登録" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="119" y="56" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-7" value="ログイン" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="282" y="56" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-8" value="ログイン完了画面" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="448" y="56" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-9" value="商品検索&lt;div&gt;一覧画面&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="609" y="56" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-10" value="商品詳細画面" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="740" y="56" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-11" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="373" y="80.5" as="sourcePoint" />
+            <mxPoint x="433" y="81" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-12" value="メアドとパスワードが正しければ" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="372" y="40" width="75" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-14" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="538" y="80.5" as="sourcePoint" />
+            <mxPoint x="598" y="81" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-15" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="694" y="80.5" as="sourcePoint" />
+            <mxPoint x="734" y="81" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-17" value="ユーザーが商品を選ぶ" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="680" y="26" width="75" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-18" value="ルイ・フィトン（バッグ）注文販売システム" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="10" width="250" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-19" value="カートへ追加される" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="901" y="60" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-20" value="商品購入画面" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="60" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-21" value="商品購入確定" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1530" y="60" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-22" value="支払い画面" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1376" y="60" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-23" value="ログイン失敗画面" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="282" y="160" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-24" value="商品購入完了メール送信" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1681" y="56" width="79" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-25" value="名前、電話番号、住所、クレカ情報登録" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1207" y="60" width="95" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-27" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="833" y="80.5" as="sourcePoint" />
+            <mxPoint x="883" y="81" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-28" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1463" y="80.5" as="sourcePoint" />
+            <mxPoint x="1523" y="81" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-29" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="991" y="80.5" as="sourcePoint" />
+            <mxPoint x="1051" y="81" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-30" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1305" y="80.5" as="sourcePoint" />
+            <mxPoint x="1365" y="81" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-31" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1620" y="80.5" as="sourcePoint" />
+            <mxPoint x="1670" y="81.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-32" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="320" y="110" as="sourcePoint" />
+            <mxPoint x="320" y="157" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-33" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1145" y="80.5" as="sourcePoint" />
+            <mxPoint x="1205" y="81" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-35" value="ユーザーが個数を選択しカートへ追加ボタンを押す" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="790" y="27" width="163" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-37" value="ユーザーがカートボタンを押す" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="973.5" y="30" width="95" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-38" value="ユーザーが情報入力終了" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1284" y="30" width="95" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-39" value="メアドとパスワードが正しくない" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="339" y="120" width="101" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-40" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="272" y="177" as="sourcePoint" />
+            <mxPoint x="272" y="104" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="242" y="144" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-41" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1777" y="82" as="sourcePoint" />
+            <mxPoint x="1827" y="81.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-42" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1569.5" y="116" as="sourcePoint" />
+            <mxPoint x="1569.5" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-43" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="2099" y="188.5" as="sourcePoint" />
+            <mxPoint x="2149" y="189.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-44" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1926" y="81.5" as="sourcePoint" />
+            <mxPoint x="1976" y="82.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-45" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="2267" y="185.5" as="sourcePoint" />
+            <mxPoint x="2317" y="186.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-48" value="商品発送（国内のみ）" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1840" y="57" width="70" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-49" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="2581" y="184.5" as="sourcePoint" />
+            <mxPoint x="2631" y="185.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-50" value="発送メール" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1843" y="160" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-51" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="2120" y="524" as="sourcePoint" />
+            <mxPoint x="2170" y="525" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-52" value="発送完了" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1994" y="58" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-53" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="2730" y="188.5" as="sourcePoint" />
+            <mxPoint x="2780" y="189.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-54" value="カード会社からクレカ使用メール" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1524" y="161" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-55" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1970" y="540" as="sourcePoint" />
+            <mxPoint x="2020" y="541" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-56" value="&lt;div&gt;&lt;div&gt;クレジットカードの紐付けされた口座に返金&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2789" y="161" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-59" value="パスワード&lt;div&gt;変更メール&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="119" y="160" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-60" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="273" y="184.5" as="sourcePoint" />
+            <mxPoint x="210" y="185" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-61" value="パスワードをお忘れですか？&lt;div&gt;ボタンを押した場合&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="184" y="214" width="121" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-65" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="160" y="220" as="sourcePoint" />
+            <mxPoint x="160" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-66" value="パスワード&lt;div&gt;変更後ログイン画面へ&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="94.5" y="260" width="129" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-67" value="" style="curved=1;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="123" y="256" as="sourcePoint" />
+            <mxPoint x="259" y="96" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="109" y="246" />
+              <mxPoint x="49" y="226" />
+              <mxPoint x="69" y="136" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-70" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="1878" y="114" as="sourcePoint" />
+            <mxPoint x="1878" y="154" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-71" value="到着完了&lt;div&gt;メール&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1996" y="164" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-73" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="2034.5" y="117" as="sourcePoint" />
+            <mxPoint x="2034.5" y="157" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-75" value="キャンセル手続き画面" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2180" y="164" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-76" value="返品理由&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;返品方法入力&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2326" y="167" width="83" height="47" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-77" value="商品の梱包、発送" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2486" y="163" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-78" value="レビュー&lt;div&gt;（任意）&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1996" y="270" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-79" value="返品商品&lt;div&gt;が到着&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2640" y="160" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-81" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="2035.5" y="222" as="sourcePoint" />
+            <mxPoint x="2035.5" y="262" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-82" value="ユーザーが商品を&lt;div&gt;返品したい場合&lt;div&gt;到着完了メールにキャンセル手続き画面リンクをつける&lt;/div&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="2060" y="120" width="166" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-84" value="返金処理終了時" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="2860" y="230" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-85" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="2421" y="185.5" as="sourcePoint" />
+            <mxPoint x="2471" y="186.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-88" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="2679.5" y="220" as="sourcePoint" />
+            <mxPoint x="2679.5" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-89" value="返品商品到着メール送信" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2640" y="270" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-90" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="2839.5" y="220" as="sourcePoint" />
+            <mxPoint x="2839.5" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rImW4XdA1xHek7s_RNNG-91" value="返金完了&lt;div&gt;メール送信&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="2801" y="270" width="80" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
