@@ -1,0 +1,40 @@
+@startuml
+' 図の全体的な方向を左から右に設定
+left to right direction
+
+' --- アクター ---
+actor Operator as オペレータ
+
+' --- Boundary（境界）: ユーザーインターフェース ---
+' ユーザーから最も近い位置に配置
+boundary LoginScreen as "ログイン画面"
+boundary MenuScreen as "メニュー画面"
+
+' --- Control（制御）: ユースケースのロジック ---
+control ValidationControl as "社員情報登録検証"
+
+' --- Entity（実体）: データや永続情報 ---
+' 制御オブジェクトの右側に配置し、関連を右に流す
+entity EmployeeInfo as "社員情報"
+
+' ==========================================================
+' --- 関連付け: 処理フロー (左から右へ) ---
+
+' 1. ログイン処理
+オペレータ -> LoginScreen : ログイン試行
+
+' 2. ログイン後の遷移
+LoginScreen -> ValidationControl : 情報検証要求
+' ValidationControl は、オペレータがアクセスするメニュー画面にも関連する
+' 検証が通るとメニュー画面へ遷移（図の循環矢印をロジックとして表現）
+ValidationControl -> MenuScreen : 遷移
+
+' 3. 検証とデータ操作
+' 検証コントロールから社員情報エンティティへのアクセスを右へ
+ValidationControl -> EmployeeInfo : 情報照合/更新
+
+' 4. メニュー画面からのアクセス（オペレータがメニューにアクセス）
+' オペレータはログイン後、直接メニュー画面にアクセス可能
+オペレータ -> MenuScreen : メニュー操作
+
+@enduml
