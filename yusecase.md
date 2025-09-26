@@ -1,5 +1,4 @@
-# ECサイト ユースケース図 (Mermaid)
-
+@startuml name
 ```mermaid
 %% 1. ユースケース図の定義を開始
 %% graph LR は「左から右」の流れを指定しますが、ユースケース図では「usecase diagram」を使います。
