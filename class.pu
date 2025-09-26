@@ -1,4 +1,4 @@
-@startuml Robodogドメインモデル図
+@startuml Bag_systemドメインモデル図
 skinparam componentStyle rectangle
 
 class ユーザー{
