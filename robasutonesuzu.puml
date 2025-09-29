@@ -1,4 +1,4 @@
-@startuml
+@startuml .
 ' 図の全体的な方向を左から右に設定
 left to right direction
 
