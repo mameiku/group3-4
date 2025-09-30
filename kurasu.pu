@@ -1,16 +1,4 @@
 @startuml .
-' 日本語フォント設定
-skinparam defaultFontName "IPAexゴシック"
-
-' スタイル設定
-skinparam class {
-  BackgroundColor #AAFFAA
-  BorderColor black
-}
-
-' 関連線のカスタマイズ (多重度を非表示に)
-skinparam classAttributeIconStyle none 
-
 ' クラス定義
 class 注文 {
   - 注文識別子 :
