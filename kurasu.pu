@@ -1,5 +1,4 @@
-@startuml UML標準表記_属性操作分離版
-
+@startuml .
 ' 日本語フォント設定
 skinparam defaultFontName "IPAexゴシック"
 
@@ -37,8 +36,6 @@ class ユーザー {
   - パスワード
   - ログイン情報
   - メールアドレス
-  --
-  ' --- 操作 (すべて + public) ---
   + 情報の更新()
   + 退会手続き()
 }
