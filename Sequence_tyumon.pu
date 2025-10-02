@@ -1,4 +1,4 @@
-@startuml
+@startuml .
 !theme toy
 
 actor 顧客
