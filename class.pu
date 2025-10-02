@@ -1,7 +1,19 @@
-@startuml Bag_systemドメインモデル図
+@startuml BBショップ_ドメインモデル図
 skinparam handwritten false
 skinparam classAttributeIconSize 0
 skinparam defaultFontName "メイリオ"
+
+class 管理者 {
+    - 管理者ID: String
+    - 名前: String
+    - パスワード: String
+    --
+    + 管理者アカウントを作成する(): void
+    + 管理者情報を変更する(): void
+    + ログインする(): void
+    + ログアウトする(): void
+    + 停止する(): void
+}
 
 class 顧客 {
     - 顧客ID: int
@@ -11,6 +23,7 @@ class 顧客 {
     - 電話番号: String
     - 住所: String
     - クレジットカード情報: String
+    --
     + ログイン(メアド: String, パス: String)
     + 新規登録(): void
     + 商品検索(キーワード: String)
@@ -23,6 +36,7 @@ class 商品 {
     - 価格: Decimal
     - 在庫数: int
     - 説明: String
+    --
     + 在庫確認(数量: int)
     + 詳細表示(): void
 }
@@ -34,6 +48,7 @@ class 注文 {
     - 注文ステータス: String
     - 合計金額: Decimal
     - 配送先住所: String
+    --
     + 注文確定(): void
     + キャンセル(): void
 }
@@ -44,6 +59,7 @@ class 注文明細 {
     - 商品ID: int
     - 数量: int
     - 購入時価格: Decimal
+    --
     + 小計計算(): Decimal
 }
 
@@ -54,6 +70,7 @@ class レビュー {
     - 評価点: int
     - コメント: String
     - 投稿日時: DateTime
+    --
     + 編集(): void
 }
 
@@ -62,6 +79,7 @@ class 支払い {
     - 注文ID: int
     - 支払い方法: String
     - 支払いステータス: String
+    --
     + 支払い処理(): boolean
     + 返金処理(): boolean
 }
@@ -72,6 +90,7 @@ class 配送 {
     - 配送ステータス: String
     - 追跡番号: String
     - 配送先住所: String
+    --
     + 配送処理(): void
     + 追跡番号登録(番号: String)
 }
@@ -82,11 +101,13 @@ class 返品 {
     - 返品理由: String
     - 返品ステータス: String
     - 返金ステータス: String
+    --
     + 返品処理(): void
 }
 
 ' ====================================================================
-' 関連定義 (Associations)
+' 関連定義
+' 管理者クラスの関連は削除し、単体で存在させます。
 ' ====================================================================
 
 ' 顧客 - 注文 (1対多)
