@@ -3,15 +3,13 @@ skinparam handwritten false
 skinparam classAttributeIconSize 0
 
 class 顧客 {
-    - 顧客ID: int <<PK>>
-    --
+    - 顧客ID: int
     - メールアドレス: String
     - パスワード: String
     - 氏名: String
     - 電話番号: String
     - 住所: String
     - クレジットカード情報: String
-    --
     + ログイン(メアド: String, パス: String)
     + 新規登録()
     + 商品検索(キーワード: String)
@@ -19,46 +17,40 @@ class 顧客 {
 }
 
 class 商品 {
-    - 商品ID: int <<PK>>
-    --
+    - 商品ID: int
     - 商品名: String
     - 価格: Decimal
     - 在庫数: int
     - 説明: String
-    --
-    + 在庫確認(数量: int): boolean
+    + 在庫確認(数量: int)
     + 詳細表示()
 }
 
 class 注文 {
-    - 注文ID: int <<PK>>
-    --
-    - 顧客ID: int <<FK>>
+    - 注文ID: int 
+    - 顧客ID: int 
     - 注文日時: DateTime
     - 注文ステータス: String
     - 合計金額: Decimal
-    - 配送先住所: String  // 注文時点の住所を保持
-    --
+    - 配送先住所: String
     + 注文確定()
     + キャンセル()
 }
 
 class 注文明細 {
-    - 注文明細ID: int <<PK>>
-    --
-    - 注文ID: int <<FK>>
-    - 商品ID: int <<FK>>
+    - 注文明細ID: int 
+    - 注文ID: int 
+    - 商品ID: int 
     - 数量: int
-    - 購入時価格: Decimal  // 価格変動に対応するため
-    --
+    - 購入時価格: Decimal
     + 小計計算(): Decimal
 }
 
 class レビュー {
-    - レビューID: int <<PK>>
+    - レビューID: int 
     --
-    - 顧客ID: int <<FK>>
-    - 商品ID: int <<FK>>
+    - 顧客ID: int
+    - 商品ID: int
     - 評価点: int
     - コメント: String
     - 投稿日時: DateTime
@@ -67,9 +59,8 @@ class レビュー {
 }
 
 class 支払い {
-    - 支払いID: int <<PK>>
-    --
-    - 注文ID: int <<FK>>
+    - 支払いID: int 
+    - 注文ID: int 
     - 支払い方法: String
     - 支払いステータス: String
     --
@@ -78,21 +69,18 @@ class 支払い {
 }
 
 class 配送 {
-    - 配送ID: int <<PK>>
-    --
-    - 注文ID: int <<FK>>
+    - 配送ID: int
+    - 注文ID: int
     - 配送ステータス: String
     - 追跡番号: String
     - 配送先住所: String
-    --
     + 配送処理()
     + 追跡番号登録()
 }
 
 class 返品 {
-    - 返品ID: int <<PK>>
-    --
-    - 注文ID: int <<FK>>
+    - 返品ID: int
+    - 注文ID: int
     - 返品理由: String
     - 返品ステータス: String
     - 返金ステータス: String
