@@ -48,13 +48,11 @@ class 注文明細 {
 
 class レビュー {
     - レビューID: int 
-    --
     - 顧客ID: int
     - 商品ID: int
     - 評価点: int
     - コメント: String
     - 投稿日時: DateTime
-    --
     + 編集()
 }
 
@@ -63,7 +61,6 @@ class 支払い {
     - 注文ID: int 
     - 支払い方法: String
     - 支払いステータス: String
-    --
     + 支払い処理()
     + 返金処理()
 }
@@ -84,7 +81,6 @@ class 返品 {
     - 返品理由: String
     - 返品ステータス: String
     - 返金ステータス: String
-    --
     + 返品処理()
 }
 
