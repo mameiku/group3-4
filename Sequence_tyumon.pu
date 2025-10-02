@@ -1,48 +1,56 @@
 @startuml
-skinparam handwritten true
-skinparam style "rounded"
+!theme toy
 
 actor 顧客
-participant "購入手続き画面\n: Boundary" as Boundary_Checkout
+participant "注文画面\n: Boundary" as Boundary_OrderForm
+participant "注文制御\n: Control" as Control_Order
 participant "決済制御\n: Control" as Control_Payment
-database "カート\n: Entity" as Entity_Cart
-database "商品\n: Entity" as Entity_Product
-participant "表示サービス\n: Control" as Control_Display
-participant "注文完了画面\n: Boundary" as Boundary_Complete
+boundary "決済システム\n: External" as External_Payment
+database "注文データ\n: Entity" as Entity_Order
+database "商品データ\n: Entity" as Entity_Product
+participant "通知サービス\n: System" as Service_Notification
 
-' 1. 購入手続き画面へ
-顧客 -> Boundary_Checkout : 1.注文を確定する
-activate Boundary_Checkout
+' 1-4. 注文確定まで (画面操作)
+顧客 -> Boundary_OrderForm : 1-4. 注文情報を入力し[確定]
+activate Boundary_OrderForm
 
-' 2. 決済制御の開始（図の「決済完了」）
-Boundary_Checkout -> Control_Payment : 2.注文・決済処理を開始
-deactivate Boundary_Checkout
+' 5. 注文制御開始 (検証を含む)
+Boundary_OrderForm -> Control_Order : 5. 注文確定要求
+deactivate Boundary_OrderForm
+activate Control_Order
+
+' 6-7. 決済連携
+Control_Order -> Control_Payment : 6. 決済処理要求
 activate Control_Payment
+Control_Payment -> External_Payment : 6.1. 支払い実行
+activate External_Payment
+External_Payment --> Control_Payment : 7. 決済完了通知
+deactivate External_Payment
+Control_Payment --> Control_Order : 7.1. 決済完了報告
+deactivate Control_Payment
 
-' 決済処理（外部連携は省略し、制御内で完了したと見なす）
+' 8. 注文情報の確定・登録
+Control_Order -> Entity_Order : 8. 注文情報登録
+activate Entity_Order
+Entity_Order --> Control_Order : 8.1. 登録完了
+deactivate Entity_Order
 
-' 3. 在庫数の更新（商品エンティティの更新）
-Control_Payment -> Entity_Product : 3.注文数分、在庫を減少
+' 9. 在庫数の更新（実在庫減算）
+Control_Order -> Entity_Product : 9. 実在庫数更新(減算)
 activate Entity_Product
-Entity_Product --> Control_Payment : 3.1.在庫更新完了
+Entity_Product --> Control_Order : 9.1. 更新完了
 deactivate Entity_Product
 
-' 4. カートのクリア（カートエンティティの更新）
-Control_Payment -> Entity_Cart : 4.注文済み商品をクリア
-activate Entity_Cart
-Entity_Cart --> Control_Payment : 4.1.カートクリア完了
-deactivate Entity_Cart
+' 10. 注文完了画面表示とメール送信
+Control_Order -> Service_Notification : 10.1. 注文確認メール送信
+activate Service_Notification
+Service_Notification --> Control_Order : 10.2. 送信完了
+deactivate Service_Notification
 
-' 5. 注文完了のメッセージ表示（図の「表示」）
-Control_Payment -> Control_Display : 5.注文完了の表示要求
-deactivate Control_Payment
-activate Control_Display
-Control_Display -> Boundary_Complete : 5.1.注文完了画面へ遷移
-activate Boundary_Complete
+Control_Order -> Boundary_OrderForm : 10.3. 注文完了表示要求
+deactivate Control_Order
+activate Boundary_OrderForm
 
-Control_Display --> Boundary_Complete : 5.2.表示データ提供
-deactivate Control_Display
-
-Boundary_Complete -> 顧客 : 6.注文完了メッセージを表示
-deactivate Boundary_Complete
+Boundary_OrderForm -> 顧客 : 11. 注文完了画面を表示
+deactivate Boundary_OrderForm
 @enduml
