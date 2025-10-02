@@ -4,56 +4,86 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="sFRxeDE_6suIDNdowpsp-2" value="顧客" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="41" y="160" width="30" height="60" as="geometry" />
+        <mxCell id="xQixNh_JzigceFBQVGWD-2" value="物流担当者" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+          <mxGeometry x="70" y="150" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="sFRxeDE_6suIDNdowpsp-5" value="商品詳細画面" style="shape=umlBoundary;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="160" y="120" width="60" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="sFRxeDE_6suIDNdowpsp-6" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
-          <mxGeometry width="160" relative="1" as="geometry">
-            <mxPoint x="77" y="177" as="sourcePoint" />
-            <mxPoint x="156" y="157" as="targetPoint" />
+        <mxCell id="xQixNh_JzigceFBQVGWD-7" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="490" y="260" as="sourcePoint" />
+            <mxPoint x="560" y="330" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="sFRxeDE_6suIDNdowpsp-8" value="カートに&lt;div&gt;追加&lt;/div&gt;" style="ellipse;shape=umlControl;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="310" y="70" width="60" height="70" as="geometry" />
-        </mxCell>
-        <mxCell id="sFRxeDE_6suIDNdowpsp-9" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
-          <mxGeometry width="160" relative="1" as="geometry">
-            <mxPoint x="225" y="170" as="sourcePoint" />
-            <mxPoint x="305" y="220" as="targetPoint" />
+        <mxCell id="xQixNh_JzigceFBQVGWD-9" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="120" y="179" as="sourcePoint" />
+            <mxPoint x="190" y="149" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="sFRxeDE_6suIDNdowpsp-10" value="カート&lt;div&gt;画面&lt;/div&gt;" style="ellipse;shape=umlEntity;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="462" y="75" width="60" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="sFRxeDE_6suIDNdowpsp-12" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
-          <mxGeometry width="160" relative="1" as="geometry">
-            <mxPoint x="374" y="110" as="sourcePoint" />
-            <mxPoint x="453" y="110" as="targetPoint" />
+        <mxCell id="xQixNh_JzigceFBQVGWD-10" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="490" y="240.25" as="sourcePoint" />
+            <mxPoint x="550" y="240" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="sFRxeDE_6suIDNdowpsp-14" value="" style="endArrow=open;endFill=1;endSize=12;html=1;rounded=0;" edge="1" parent="1">
-          <mxGeometry width="160" relative="1" as="geometry">
-            <mxPoint x="294" y="234" as="sourcePoint" />
-            <mxPoint x="214" y="184" as="targetPoint" />
+        <mxCell id="xQixNh_JzigceFBQVGWD-12" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="300" y="240" as="sourcePoint" />
+            <mxPoint x="400" y="240" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="sFRxeDE_6suIDNdowpsp-15" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;カートに追加&lt;/font&gt;&lt;/span&gt;" style="text;align=center;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="1">
-          <mxGeometry x="41" y="20" width="109" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="sFRxeDE_6suIDNdowpsp-16" value="" style="endArrow=block;startArrow=block;endFill=1;startFill=1;html=1;rounded=0;" edge="1" parent="1">
-          <mxGeometry width="160" relative="1" as="geometry">
-            <mxPoint x="230" y="140" as="sourcePoint" />
-            <mxPoint x="300" y="120" as="targetPoint" />
+        <mxCell id="xQixNh_JzigceFBQVGWD-13" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="180" as="sourcePoint" />
+            <mxPoint x="300" y="230" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="sFRxeDE_6suIDNdowpsp-18" value="在庫不足画面" style="ellipse;shape=umlControl;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="310" y="200" width="60" height="70" as="geometry" />
+        <mxCell id="xQixNh_JzigceFBQVGWD-14" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="301" y="150" as="sourcePoint" />
+            <mxPoint x="400" y="150" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="sFRxeDE_6suIDNdowpsp-19" value="&lt;span style=&quot;font-weight: normal;&quot;&gt;在庫不足の場合&lt;/span&gt;" style="text;align=center;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;html=1;" vertex="1" parent="1">
-          <mxGeometry x="181" y="210" width="80" height="26" as="geometry" />
+        <mxCell id="xQixNh_JzigceFBQVGWD-15" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;出荷準備&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="50" y="70" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="xQixNh_JzigceFBQVGWD-16" value="出荷管理画面" style="shape=umlBoundary;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="110" width="90" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="xQixNh_JzigceFBQVGWD-17" value="出荷待ち&lt;div&gt;リスト&lt;/div&gt;" style="ellipse;shape=umlControl;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="410" y="105" width="70" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="xQixNh_JzigceFBQVGWD-18" value="出荷指示画面" style="shape=umlBoundary;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="200" y="200" width="90" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="xQixNh_JzigceFBQVGWD-19" value="在庫処理" style="ellipse;shape=umlControl;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="410" y="195" width="70" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="xQixNh_JzigceFBQVGWD-20" value="出荷" style="ellipse;shape=umlEntity;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="710" y="215" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="xQixNh_JzigceFBQVGWD-21" value="ピッキングリスト" style="ellipse;shape=umlEntity;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="565" y="320" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="6KSfEO6wfbXIANXWEKZk-2" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="640" y="244.75" as="sourcePoint" />
+            <mxPoint x="700" y="244.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6KSfEO6wfbXIANXWEKZk-3" value="出荷完了&lt;div&gt;画面&lt;/div&gt;" style="ellipse;shape=umlControl;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="565" y="195" width="70" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="6KSfEO6wfbXIANXWEKZk-4" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="480" y="215.25" as="sourcePoint" />
+            <mxPoint x="550" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6KSfEO6wfbXIANXWEKZk-6" value="商品在庫" style="ellipse;shape=umlEntity;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="100" width="60" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="6KSfEO6wfbXIANXWEKZk-7" value="在庫数&lt;div&gt;減算&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="480" y="160" width="80" height="10" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
