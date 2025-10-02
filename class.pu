@@ -1,4 +1,4 @@
-@startuml BBショップ_ドメインモデル図
+@startuml　.
 skinparam handwritten false
 skinparam classAttributeIconSize 0
 skinparam defaultFontName "メイリオ"
