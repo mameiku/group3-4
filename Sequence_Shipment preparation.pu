@@ -1,0 +1,57 @@
+@startuml .
+!theme toy
+
+actor 物流担当者
+participant "出荷リスト画面\n: Boundary" as Boundary_List
+participant "出荷制御\n: Control" as Control_Shipping
+participant "在庫管理\n: Control" as Control_Stock
+database "注文データ\n: Entity" as Entity_Order
+database "商品データ\n: Entity" as Entity_Product
+participant "追跡番号サービス\n: External" as External_Tracking
+participant "通知サービス\n: System" as Service_Notification
+
+' 1-2. 出荷指示の選択
+物流担当者 -> Boundary_List : 1-2. [出荷リスト]へ移動し、出荷対象を選択
+
+' 3-4. ピッキングリスト生成とピッキング作業（物理作業は省略）
+Boundary_List -> Control_Shipping : 3. 出荷指示要求(注文ID)
+activate Control_Shipping
+Control_Shipping -> Control_Stock : 3.1. ピッキングリスト生成要求
+activate Control_Stock
+Control_Stock -> Entity_Product : 3.2. 商品情報/在庫情報を参照
+activate Entity_Product
+Entity_Product --> Control_Stock : 3.3. 情報返却
+deactivate Entity_Product
+Control_Stock --> Control_Shipping : 3.4. ピッキングリスト返却
+deactivate Control_Stock
+
+' 5-6. 梱包・運送会社情報の入力
+Control_Shipping --> Boundary_List : 4. 梱包指示を表示
+deactivate Control_Shipping
+activate Boundary_List
+物流担当者 -> Boundary_List : 5-6. 運送会社、追跡番号などを入力
+Boundary_List -> Control_Shipping : 7. [出荷完了]ボタンを選択
+activate Control_Shipping
+
+' 8. 注文ステータスの更新
+Control_Shipping -> Entity_Order : 8. 注文ステータス更新(出荷完了/発送済み)
+activate Entity_Order
+Entity_Order --> Control_Shipping : 8.1. 更新完了
+deactivate Entity_Order
+
+' 9. 在庫数の更新（在庫引当解除 + 実在庫減算）
+Control_Shipping -> Entity_Product : 9. 実在庫数更新(在庫減算)
+activate Entity_Product
+Entity_Product --> Control_Shipping : 9.1. 更新完了
+deactivate Entity_Product
+
+' 10. 追跡番号メールの自動送信
+Control_Shipping -> Service_Notification : 10. 発送完了メール送信要求(顧客情報, 追跡番号)
+activate Service_Notification
+Service_Notification --> Control_Shipping : 10.1. 送信完了
+deactivate Service_Notification
+
+Control_Shipping --> Boundary_List : 10.2. 処理完了通知
+deactivate Control_Shipping
+deactivate Boundary_List
+@enduml
