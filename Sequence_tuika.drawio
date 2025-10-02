@@ -1,0 +1,68 @@
+@startuml
+skinparam handwritten true
+skinparam style "rounded"
+
+actor 顧客
+participant "ショッピングカート画面\n: Boundary" as Boundary_Cart
+participant "注文フォーム画面\n: Boundary" as Boundary_OrderForm
+participant "注文制御\n: Control" as Control_Order
+participant "決済制御\n: Control" as Control_Payment
+boundary "決済システム\n: External" as External_Payment
+database "商品\n: Entity" as Entity_Product
+database "注文\n: Entity" as Entity_Order
+participant "通知サービス\n: System" as Service_Notification
+
+' 1. 「購入手続きへ」ボタン
+顧客 -> Boundary_Cart : 1.[購入手続きへ]ボタンをクリック
+activate Boundary_Cart
+Boundary_Cart -> Boundary_OrderForm : 2.注文フォームを表示
+deactivate Boundary_Cart
+activate Boundary_OrderForm
+
+' 3. 配送先/支払い方法の入力と確認
+顧客 -> Boundary_OrderForm : 3.配送先・支払い方法などを入力し確認
+
+' 4. 「注文を確定する」ボタン
+顧客 -> Boundary_OrderForm : 4.[注文を確定する]ボタンをクリック
+
+' 5. 注文情報の検証
+Boundary_OrderForm -> Control_Order : 5.注文確定要求(入力情報)
+deactivate Boundary_OrderForm
+activate Control_Order
+
+' 6. 決済連携
+Control_Order -> Control_Payment : 6.決済処理要求(金額, 支払い方法)
+activate Control_Payment
+Control_Payment -> External_Payment : 6.1.支払い処理実行
+activate External_Payment
+External_Payment --> Control_Payment : 7.決済完了通知
+deactivate External_Payment
+
+' 8. 注文情報の確定・登録
+Control_Payment --> Control_Order : 7.1.決済完了通知
+deactivate Control_Payment
+Control_Order -> Entity_Order : 8.注文を確定しデータベースに登録
+activate Entity_Order
+Entity_Order --> Control_Order : 8.1.登録完了
+deactivate Entity_Order
+
+' 9. 在庫数の更新
+Control_Order -> Entity_Product : 9.注文された商品の在庫数更新
+activate Entity_Product
+Entity_Product --> Control_Order : 9.1.更新完了
+deactivate Entity_Product
+
+' 10. 注文完了画面表示とメール送信
+Control_Order -> Boundary_OrderForm : 10.注文完了画面表示要求
+Control_Order -> Service_Notification : 10.1.注文確認メール送信要求(顧客情報, 注文内容)
+activate Service_Notification
+Service_Notification --> Control_Order : 10.2.送信完了
+deactivate Service_Notification
+
+Control_Order --> Boundary_OrderForm : 完了通知
+deactivate Control_Order
+activate Boundary_OrderForm
+
+Boundary_OrderForm -> 顧客 : 11.注文完了画面を表示
+deactivate Boundary_OrderForm
+@enduml
