@@ -1,4 +1,4 @@
-@startuml
+@startuml Bag_systemユースケース図
 left to right direction
 
 actor 顧客
