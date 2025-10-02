@@ -1,12 +1,68 @@
-@startuml .
+@startuml BBShop_DomainModel_English
 skinparam handwritten false
 skinparam classAttributeIconSize 0
 skinparam defaultFontName "メイリオ"
 
+' ====================================================================
+' 1. クラス定義 (Core Entities)
+' ====================================================================
+
+class Customer {
+    - customerId: int
+    - email: String
+    - password: String
+    - name: String
+    - phone: String
+    - address: String
+    - creditCardInfo: String
+    --
+    + login(email: String, password: String): boolean
+    + register(): void
+    + searchProducts(keyword: String): List<Product>
+    + postReview(productId: int): void
+}
+
+class Product {
+    - productId: int
+    - name: String
+    - price: Decimal
+    - stock: int
+    - description: String
+    --
+    + checkStock(quantity: int): boolean
+    + showDetails(): void
+}
+
+class Order {
+    - orderId: int
+    - customerId: int
+    - orderDate: DateTime
+    - status: String
+    - totalAmount: Decimal
+    - shippingAddress: String
+    --
+    + finalizeOrder(): void
+    + cancelOrder(): void
+}
+
+class OrderItem {
+    - orderItemId: int
+    - orderId: int
+    - productId: int
+    - quantity: int
+    - purchasePrice: Decimal
+    --
+    + calculateSubtotal(): Decimal
+}
+
+' ====================================================================
+' 2. サポートクラス定義 (Support Entities)
+' ====================================================================
+
 class Administrator {
-    - 管理者ID: String
-    - 名前: String
-    - パスワード: String
+    - adminId: String
+    - name: String
+    - password: String
     --
     + createAccount(): void
     + updateInfo(): void
@@ -15,122 +71,74 @@ class Administrator {
     + deactivateAccount(): void
 }
 
-class Customer {
-    - 顧客ID: int
-    - メールアドレス: String
-    - パスワード: String
-    - 氏名: String
-    - 電話番号: String
-    - 住所: String
-    - クレジットカード情報: String
-    --
-    + login(メアド: String, パス: String)
-    + register(): void
-    + searchProducts(キーワード: String)
-    + postReview(商品ID: int)
-}
-
-class Product {
-    - 商品ID: int
-    - 商品名: String
-    - 価格: Decimal
-    - 在庫数: int
-    - 説明: String
-    --
-    + checkStock(数量: int)
-    + showDetails(): void
-}
-
-class Order {
-    - 注文ID: int
-    - 顧客ID: int
-    - 注文日時: DateTime
-    - 注文ステータス: String
-    - 合計金額: Decimal
-    - 配送先住所: String
-    --
-    + finalizeOrder(): void
-    + cancelOrder(): void
-}
-
-class OrderItem {
-    - 注文明細ID: int
-    - 注文ID: int
-    - 商品ID: int
-    - 数量: int
-    - 購入時価格: Decimal
-    --
-    + calculateSubtotal(): Decimal
-}
-
 class Review {
-    - レビューID: int
-    - 顧客ID: int
-    - 商品ID: int
-    - 評価点: int
-    - コメント: String
-    - 投稿日時: DateTime
+    - reviewId: int
+    - customerId: int
+    - productId: int
+    - rating: int
+    - comment: String
+    - postedDate: DateTime
     --
     + edit(): void
 }
 
 class Payment {
-    - 支払いID: int
-    - 注文ID: int
-    - 支払い方法: String
-    - 支払いステータス: String
+    - paymentId: int
+    - orderId: int
+    - method: String
+    - status: String
     --
     + processPayment(): boolean
     + processRefund(): boolean
 }
 
 class Shipping {
-    - 配送ID: int
-    - 注文ID: int
-    - 配送ステータス: String
-    - 追跡番号: String
-    - 配送先住所: String
+    - shippingId: int
+    - orderId: int
+    - status: String
+    - trackingNumber: String
+    - shippingAddress: String
     --
     + processShipping(): void
-    + registerTrackingNumber(番号: String)
+    + registerTrackingNumber(number: String): void
 }
 
 class Return {
-    - 返品ID: int
-    - 注文ID: int
-    - 返品理由: String
-    - 返品ステータス: String
-    - 返金ステータス: String
+    - returnId: int
+    - orderId: int
+    - reason: String
+    - status: String
+    - refundStatus: String
     --
     + processReturn(): void
 }
 
 ' ====================================================================
-' 関連定義
+' 3. クラス配置の指示 (Layout Hints for better visual flow)
 ' ====================================================================
 
-' 顧客 - 注文 (1対多)
-Customer "1" o-- "*" Order : 発注元
+Product -down-> Order : visual adjustment
+OrderItem -left-> Order : visual adjustment
+Review -right-> Product : visual adjustment
 
-' 注文 - 注文明細 (1対多/コンポジション)
-Order "1" *-- "1..*" OrderItem : 構成
+' ====================================================================
+' 4. 関連定義 (Associations)
+' ====================================================================
 
-' 注文明細 -> 商品 (多対1/一方向)
-OrderItem "*" -> "1" Product : 対象
+' Order Flow Associations
+Customer "1" o-- "*" Order : places
+Order "1" *-- "1..*" OrderItem : includes
 
-' 顧客 - レビュー (1対多)
-Customer "1" o-- "*" Review : 投稿者
+' Product and Review Associations
+OrderItem "*" -> "1" Product : refersTo
+Customer "1" o-- "*" Review : posts
+Product "1" o-- "*" Review : has
 
-' 商品 - レビュー (1対多)
-Product "1" o-- "*" Review : 評価対象
+' Payment, Shipping, and Return Associations
+Order "1" -> "1" Payment : handles
+Order "1" -> "1" Shipping : manages
+Order "1" o-- "0..1" Return : isReturned
 
-' 注文 -> 支払い (1対1/一方向)
-Order "1" -> "1" Payment : 決済情報
-
-' 注文 -> 配送 (1対1/一方向)
-Order "1" -> "1" Shipping : 配送情報
-
-' 注文 - 返品 (1対0..1)
-Order "1" o-- "0..1" Return : 返品情報
+' Administrator class stands independently (no domain associations)
 
 @enduml
