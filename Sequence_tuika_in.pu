@@ -1,46 +1,67 @@
-@startuml .
+@startuml AddToCartSequenceDiagram
 !theme toy
 
-actor 顧客
-participant "商品詳細画面\n: Boundary" as Boundary_ProductDetail
-participant "カート制御\n: Control" as Control_Cart
-database "商品データ\n: Entity" as Entity_Product
-database "カート\n: Entity" as Entity_Cart
+' ====================================================================
+' Participant Definitions
+' ====================================================================
+actor User
+boundary GoodsDetailJSP as "Product Detail Screen"
+control AddCartJSP as "Add to Cart Controller"
+control CustomerJava as "Customer Service"
+control GoodsJava as "Product Service"
+control CartJava as "Cart Service"
+boundary AddCartCompleteJSP as "Cart Complete Screen"
+boundary ErrorJSP as "Error Screen"
 
-' 1. カートに追加操作
-顧客 -> Boundary_ProductDetail : 1. 数量を指定し[カートに入れる]を選択
-activate Boundary_ProductDetail
+' ====================================================================
+' Basic Flow: User is already logged in
+' ====================================================================
 
-' 2. カート制御へ要求
-Boundary_ProductDetail -> Control_Cart : 2. 商品追加要求(商品ID, 数量)
-deactivate Boundary_ProductDetail
-activate Control_Cart
+' 1. The customer specifies the quantity on the product detail screen and selects 'Add to Cart'.
+User -> GoodsDetailJSP : 1. Select 'Add to Cart' (Product ID, Quantity)
+activate GoodsDetailJSP
 
-' 3. 在庫確認（在庫管理を省略し、商品データに直接確認）
-Control_Cart -> Entity_Product : 3. 在庫数参照(商品ID)
-activate Entity_Product
-Entity_Product --> Control_Cart : 3.1. 在庫数返却
-deactivate Entity_Product
+GoodsDetailJSP -> AddCartJSP : Cart Add Request (Product ID, Quantity)
+deactivate GoodsDetailJSP
+activate AddCartJSP
 
-alt 在庫あり
-    ' 4. カート情報更新
-    Control_Cart -> Entity_Cart : 4. 商品と数量を追加/更新
-    activate Entity_Cart
-    Entity_Cart --> Control_Cart : 4.1. 追加完了
-    deactivate Entity_Cart
+' --- Login Check (Implicit, handled by Session/Customer Service) ---
+' Note: Assuming the user is already authenticated (Pre-condition).
+AddCartJSP -> CustomerJava : Get Login Information()
+activate CustomerJava
+CustomerJava --> AddCartJSP : Login Information (Logged In User)
+deactivate CustomerJava
 
-    ' 5. 完了通知
-    Control_Cart --> Boundary_ProductDetail : 5. 追加完了通知
-    deactivate Control_Cart
-    activate Boundary_ProductDetail
-    Boundary_ProductDetail -> 顧客 : 6. 「追加完了」メッセージを表示
-else 在庫なし (代替フロー)
-    ' 7. エラー通知
-    Control_Cart --> Boundary_ProductDetail : 7. 在庫不足エラー通知
-    deactivate Control_Cart
-    activate Boundary_ProductDetail
-    Boundary_ProductDetail -> 顧客 : 8. 「在庫が不足しています」メッセージを表示
+' 2. The system checks the stock information and confirms that the specified quantity can be purchased.
+AddCartJSP -> GoodsJava : 2. Check Stock (Product ID, Quantity)
+activate GoodsJava
+GoodsJava --> AddCartJSP : Stock Information (Sufficient)
+deactivate GoodsJava
+
+alt [Insufficient Stock]
+    ' Alternative Flow: Insufficient stock
+    AddCartJSP -> ErrorJSP : Redirect to Error Screen
+    activate ErrorJSP
+    ErrorJSP --> User : Display Error Message ("Stock is insufficient")
+    deactivate ErrorJSP
+    
+else [Stock Sufficient]
+    ' 3. If there is stock, the system adds the product and quantity to the cart.
+    AddCartJSP -> CartJava : 3. Add Product to Cart (Product ID, Quantity, User ID)
+    activate CartJava
+    CartJava --> AddCartJSP : Addition Successful
+    deactivate CartJava
+    
+    ' 4. The system displays a confirmation message "Product has been added to the cart."
+    AddCartJSP -> AddCartCompleteJSP : 4. Display Confirmation Message
+    activate AddCartCompleteJSP
+    
+    ' 5. The customer can either continue shopping or navigate to the cart screen.
+    AddCartCompleteJSP --> User : Confirmation Message Display
+    deactivate AddCartCompleteJSP
+    
 end
 
-deactivate Boundary_ProductDetail
+deactivate AddCartJSP
+
 @enduml

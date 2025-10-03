@@ -1,77 +1,63 @@
-@startuml .
+@startuml AddToCartSequenceDiagram_LoggedOut
 !theme toy
 
-actor 顧客
-participant "商品詳細画面\n: Boundary" as Boundary_ProductDetail
-participant "ゲストカート制御\n: Control" as Control_GuestCart
-participant "ログイン画面\n: Boundary" as Boundary_Login
-participant "認証制御\n: Control" as Control_Auth
-participant "カート制御\n: Control" as Control_Cart
-participant "カート画面\n: Boundary" as Boundary_Cart
-database "セッションカート\n: Entity" as Entity_SessionCart
-database "顧客カート\n: Entity" as Entity_CustomerCart
-database "商品データ\n: Entity" as Entity_Product
+' ====================================================================
+' Participant Definitions
+' ====================================================================
+actor User
+boundary GoodsDetailJSP as "Product Detail Screen"
+control AddCartJSP as "Add to Cart Controller"
+control CustomerJava as "Customer Service"
+boundary LoginJSP as "Login Screen"
+control GoodsJava as "Product Service"
+control CartJava as "Cart Service"
+boundary AddCartCompleteJSP as "Cart Complete Screen"
+boundary ErrorJSP as "Error Screen"
 
-== 1. カートに追加（未ログイン時） ==
-' 1-2. カートに追加操作
-顧客 -> Boundary_ProductDetail : 1. 商品を選択し[カートに入れる]
-activate Boundary_ProductDetail
-Boundary_ProductDetail -> Control_GuestCart : 2. 商品追加要求(商品ID, 数量, セッションID)
-deactivate Boundary_ProductDetail
-activate Control_GuestCart
+' ====================================================================
+' Basic Flow: User is logged out (Pre-condition is NOT met)
+' ====================================================================
 
-' 2.1. 在庫確認（省略）
+' 1. The customer specifies the quantity on the product detail screen and selects 'Add to Cart'.
+User -> GoodsDetailJSP : 1. Select 'Add to Cart' (Product ID, Quantity)
+activate GoodsDetailJSP
 
-' 2.2. セッションカートへ一時保存
-Control_GuestCart -> Entity_SessionCart : 2.2. 商品をセッションに一時保存
-activate Entity_SessionCart
-Entity_SessionCart --> Control_GuestCart : 2.3. 保存完了
-deactivate Entity_SessionCart
+GoodsDetailJSP -> AddCartJSP : Cart Add Request (Product ID, Quantity)
+deactivate GoodsDetailJSP
+activate AddCartJSP
 
-' 3. ログイン画面への強制遷移
-Control_GuestCart -> Boundary_Login : 3. ログイン画面へ強制遷移要求
-deactivate Control_GuestCart
-activate Boundary_Login
+' --- Login Check ---
+' 2. The system confirms if the customer is logged in.
+AddCartJSP -> CustomerJava : Get Login Information()
+activate CustomerJava
+CustomerJava --> AddCartJSP : Login Information (Logged Out User / Null)
+deactivate CustomerJava
 
-== 2. ログイン処理とカート統合 ==
-' 4. ログイン
-顧客 -> Boundary_Login : 4. ログイン情報を入力し[ログイン]
+alt [User is Logged Out]
+    ' Alternative Flow 2-1: If the customer is not logged in, the system confirms this.
+    ' Alternative Flow 2-2: The system redirects to the Login Screen.
+    AddCartJSP -> LoginJSP : Redirect to Login Screen
+    activate LoginJSP
+    
+    LoginJSP --> User : Display Login Screen
+    
+    Note right : User performs the 'Login' Use Case here.\nUpon successful login, they will be redirected to the Cart/Product.
+    
+    deactivate LoginJSP
+    
+else [User is Logged In (Fallback)]
+    ' This path represents the original Basic Flow, which should not be triggered if the pre-condition is 'logged out'.
+    
+    ' 2. Check Stock
+    AddCartJSP -> GoodsJava : Check Stock (Product ID, Quantity)
+    activate GoodsJava
+    GoodsJava --> AddCartJSP : Stock Information
+    deactivate GoodsJava
+    
+    ' ... followed by the rest of the Add to Cart logic ...
+    
+end ' End Login Check alt
 
-' 4.1. 認証
-Boundary_Login -> Control_Auth : 4.1. 認証要求
-activate Control_Auth
-Control_Auth --> Boundary_Login : 4.2. 認証成功(顧客ID)
-deactivate Control_Auth
+deactivate AddCartJSP
 
-' 5. カート統合の開始
-Boundary_Login -> Control_Cart : 5. ログイン後処理要求(顧客ID, セッションID)
-deactivate Boundary_Login
-activate Control_Cart
-
-' 5.1. セッションカート内容の取得
-Control_Cart -> Entity_SessionCart : 5.1. セッションカート内容取得
-activate Entity_SessionCart
-Entity_SessionCart --> Control_Cart : 5.2. カート内容返却
-deactivate Entity_SessionCart
-
-' 5.3. 永続カートへマージ
-Control_Cart -> Entity_CustomerCart : 5.3. カート内容を顧客カートへマージ(統合)
-activate Entity_CustomerCart
-Entity_CustomerCart --> Control_Cart : 5.4. マージ完了
-deactivate Entity_CustomerCart
-
-' 5.5. セッションカートのクリア（任意）
-Control_Cart -> Entity_SessionCart : 5.5. セッションカートクリア
-activate Entity_SessionCart
-Entity_SessionCart --> Control_Cart : 5.6. クリア完了
-deactivate Entity_SessionCart
-deactivate Control_Cart
-
-' 5.7. 統合後のカート画面表示
-Control_Cart -> Boundary_Cart : 5.7. カート画面へ遷移要求
-activate Boundary_Cart
-
-' 5.8. カート内容の表示（最終結果）
-Boundary_Cart -> 顧客 : 5.8. 統合後のカート内容を表示
-deactivate Boundary_Cart
-@endumll
+@enduml
