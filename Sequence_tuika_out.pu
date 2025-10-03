@@ -2,41 +2,41 @@
 !theme toy
 
 ' ====================================================================
-' Participant Definitions
+' Participant Definitions (Using .jsp and .java notation)
 ' ====================================================================
 actor User
-boundary GoodsDetailJSP as "Product Detail Screen"
-control AddCartJSP as "Add to Cart Controller"
-control CustomerJava as "Customer Service"
-boundary LoginJSP as "Login Screen"
-control GoodsJava as "Product Service"
-control CartJava as "Cart Service"
-boundary AddCartCompleteJSP as "Cart Complete Screen"
-boundary ErrorJSP as "Error Screen"
+boundary ProductDetailJSP as "ProductDetail.jsp"
+control AddToCartJSP as "AddToCart.jsp"
+control CustomerServiceJava as "CustomerService.java"
+boundary LoginJSP as "Login.jsp"
+control ProductServiceJava as "ProductService.java"
+control CartServiceJava as "CartService.java"
+boundary CartCompleteJSP as "CartComplete.jsp"
+boundary ErrorJSP as "Error.jsp"
 
 ' ====================================================================
 ' Basic Flow: User is logged out (Pre-condition is NOT met)
 ' ====================================================================
 
 ' 1. The customer specifies the quantity on the product detail screen and selects 'Add to Cart'.
-User -> GoodsDetailJSP : 1. Select 'Add to Cart' (Product ID, Quantity)
-activate GoodsDetailJSP
+User -> ProductDetailJSP : 1. Select 'Add to Cart' (Product ID, Quantity)
+activate ProductDetailJSP
 
-GoodsDetailJSP -> AddCartJSP : Cart Add Request (Product ID, Quantity)
-deactivate GoodsDetailJSP
-activate AddCartJSP
+ProductDetailJSP -> AddToCartJSP : Cart Add Request (Product ID, Quantity)
+deactivate ProductDetailJSP
+activate AddToCartJSP
 
 ' --- Login Check ---
 ' 2. The system confirms if the customer is logged in.
-AddCartJSP -> CustomerJava : Get Login Information()
-activate CustomerJava
-CustomerJava --> AddCartJSP : Login Information (Logged Out User / Null)
-deactivate CustomerJava
+AddToCartJSP -> CustomerServiceJava : Get Login Information()
+activate CustomerServiceJava
+CustomerServiceJava --> AddToCartJSP : Login Information (Logged Out User / Null)
+deactivate CustomerServiceJava
 
 alt [User is Logged Out]
     ' Alternative Flow 2-1: If the customer is not logged in, the system confirms this.
     ' Alternative Flow 2-2: The system redirects to the Login Screen.
-    AddCartJSP -> LoginJSP : Redirect to Login Screen
+    AddToCartJSP -> LoginJSP : Redirect to Login Screen
     activate LoginJSP
     
     LoginJSP --> User : Display Login Screen
@@ -49,15 +49,15 @@ else [User is Logged In (Fallback)]
     ' This path represents the original Basic Flow, which should not be triggered if the pre-condition is 'logged out'.
     
     ' 2. Check Stock
-    AddCartJSP -> GoodsJava : Check Stock (Product ID, Quantity)
-    activate GoodsJava
-    GoodsJava --> AddCartJSP : Stock Information
-    deactivate GoodsJava
+    AddToCartJSP -> ProductServiceJava : Check Stock (Product ID, Quantity)
+    activate ProductServiceJava
+    ProductServiceJava --> AddToCartJSP : Stock Information
+    deactivate ProductServiceJava
     
     ' ... followed by the rest of the Add to Cart logic ...
     
 end ' End Login Check alt
 
-deactivate AddCartJSP
+deactivate AddToCartJSP
 
 @enduml

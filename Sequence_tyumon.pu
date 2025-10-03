@@ -2,111 +2,111 @@
 !theme toy
 
 ' ====================================================================
-' Participant Definitions (Based on Use Case Description)
+' Participant Definitions (Using .jsp and .java notation)
 ' ====================================================================
 actor LogisticsStaff as "Logistics Staff"
-boundary ShippingListScreen as "Shipping Waitlist Screen"
-boundary ShippingInstructionScreen as "Shipping Instruction Screen"
-control ShippingProcessor as "Shipping Processor"
-control InventorySystem as "Inventory System"
-database Database as "Database"
-control MailSystem as "Shipping Email System"
+boundary ShippingListJSP as "ShippingList.jsp"
+boundary ShippingInstructionJSP as "ShippingInstruction.jsp"
+control ShippingProcessorJava as "ShippingProcessor.java"
+control InventoryManagerJava as "InventoryManager.java"
+database ShippingDBJava as "ShippingDB.java"
+control MailServiceJava as "MailService.java"
 
 ' ====================================================================
 ' Basic Flow
 ' ====================================================================
 
 ' 1. Logistics staff navigates from the management screen to the "Shipping Waitlist".
-LogisticsStaff -> ShippingListScreen : 1. Navigate to Shipping Waitlist
-activate ShippingListScreen
+LogisticsStaff -> ShippingListJSP : 1. Navigate to Shipping Waitlist
+activate ShippingListJSP
 
 ' 2. The system selects an order awaiting shipment and displays "Shipping Instructions".
-ShippingListScreen -> ShippingInstructionScreen : Display Instruction Request (Order Data)
-deactivate ShippingListScreen
-activate ShippingInstructionScreen
+ShippingListJSP -> ShippingInstructionJSP : Display Instruction Request (Order Data)
+deactivate ShippingListJSP
+activate ShippingInstructionJSP
 
-ShippingInstructionScreen --> LogisticsStaff : 2. Display Shipping Instructions()
+ShippingInstructionJSP --> LogisticsStaff : 2. Display Shipping Instructions()
 
 ' 3. The system executes the shipping process based on the order and creates a picking list.
-ShippingInstructionScreen -> ShippingProcessor : 3. Execute Shipping Process (Order Data)
-activate ShippingProcessor
+ShippingInstructionJSP -> ShippingProcessorJava : 3. Execute Shipping Process (Order Data)
+activate ShippingProcessorJava
 
-ShippingProcessor -> InventorySystem : 3. Request Picking List
-activate InventorySystem
-InventorySystem --> ShippingProcessor : Picking List
+ShippingProcessorJava -> InventoryManagerJava : 3. Request Picking List
+activate InventoryManagerJava
+InventoryManagerJava --> ShippingProcessorJava : Picking List
 
 ' 4. The actor gathers physical goods from the warehouse based on the picking list.
-Note over LogisticsStaff, ShippingProcessor : 4. Gather physical goods based on picking list
+Note over LogisticsStaff, ShippingProcessorJava : 4. Gather physical goods based on picking list
 
 ' 5. The actor inspects and packs the goods.
 Note over LogisticsStaff : 5. Perform inspection and packaging
 
 ' 6. The actor issues the shipping slip and enters the tracking number into the system.
-LogisticsStaff -> ShippingInstructionScreen : 6. Enter Tracking Number
-ShippingInstructionScreen -> ShippingProcessor : Register Tracking Number()
+LogisticsStaff -> ShippingInstructionJSP : 6. Enter Tracking Number
+ShippingInstructionJSP -> ShippingProcessorJava : Register Tracking Number()
 
 ' --- Alternative Flow 1: Cannot ship due to insufficient stock (Fork at Basic Flow 3) ---
 alt [Insufficient Stock]
     ' Basic Flow 3. System checks stock.
-    ShippingProcessor -> InventorySystem : Check Stock()
-    InventorySystem --> ShippingProcessor : Stock Info (Insufficient)
+    ShippingProcessorJava -> InventoryManagerJava : Check Stock()
+    InventoryManagerJava --> ShippingProcessorJava : Stock Info (Insufficient)
     
     ' Alt 1-1. System detects insufficient stock during processing.
-    ShippingProcessor -> ShippingInstructionScreen : Insufficient Stock Error Display
+    ShippingProcessorJava -> ShippingInstructionJSP : Insufficient Stock Error Display
     
     ' Alt 1-2. System updates the order status to "Insufficient Stock".
-    ShippingProcessor -> Database : Update Order Status ("Insufficient Stock")
-    activate Database
-    Database --> ShippingProcessor : Update Complete
-    deactivate Database
+    ShippingProcessorJava -> ShippingDBJava : Update Order Status ("Insufficient Stock")
+    activate ShippingDBJava
+    ShippingDBJava --> ShippingProcessorJava : Update Complete
+    deactivate ShippingDBJava
 
     ' Alt 1-3. Display warning message to the actor.
-    ShippingInstructionScreen --> LogisticsStaff : Insufficient Stock Warning
+    ShippingInstructionJSP --> LogisticsStaff : Insufficient Stock Warning
 
-    deactivate InventorySystem
-    deactivate ShippingProcessor
-    deactivate ShippingInstructionScreen
+    deactivate InventoryManagerJava
+    deactivate ShippingProcessorJava
+    deactivate ShippingInstructionJSP
 
 ' --- Alternative Flow 2: Invalid format for tracking number (Fork at Basic Flow 6) ---
 alt [Invalid Tracking Number]
-    ShippingProcessor -> ShippingInstructionScreen : Validate Tracking Number()
-    ShippingInstructionScreen -> ShippingProcessor : Validation Result (Invalid)
+    ShippingProcessorJava -> ShippingInstructionJSP : Validate Tracking Number()
+    ShippingInstructionJSP -> ShippingProcessorJava : Validation Result (Invalid)
 
     ' Alt 2-1. System displays an error message.
-    ShippingProcessor -> ShippingInstructionScreen : Error Message Display ("Invalid tracking number format")
-    deactivate ShippingProcessor
-    ShippingInstructionScreen --> LogisticsStaff : Invalid Tracking Number Error
+    ShippingProcessorJava -> ShippingInstructionJSP : Error Message Display ("Invalid tracking number format")
+    deactivate ShippingProcessorJava
+    ShippingInstructionJSP --> LogisticsStaff : Invalid Tracking Number Error
     
     Note over LogisticsStaff : Staff confirms/enters correct tracking number and\nclicks "Shipment Complete" again (Returns to Basic Flow)
-    deactivate ShippingInstructionScreen
+    deactivate ShippingInstructionJSP
     
 else [No Issues]
     ' 7. The actor selects the "Shipment Complete" button.
-    LogisticsStaff -> ShippingInstructionScreen : 7. Select "Shipment Complete"
-    ShippingInstructionScreen -> ShippingProcessor : Finalize Order (Tracking Number)
+    LogisticsStaff -> ShippingInstructionJSP : 7. Select "Shipment Complete"
+    ShippingInstructionJSP -> ShippingProcessorJava : Finalize Order (Tracking Number)
     
     ' 8. The system updates the order status to "Shipment Complete".
-    ShippingProcessor -> Database : 8. Update Order Status ("Shipment Complete")
-    activate Database
+    ShippingProcessorJava -> ShippingDBJava : 8. Update Order Status ("Shipment Complete")
+    activate ShippingDBJava
 
     ' 9. The system reduces the stock quantity of the shipped goods.
-    ShippingProcessor -> InventorySystem : 9. Decrease Stock Quantity (Shipped Amount)
-    InventorySystem --> ShippingProcessor : Decrease Complete
-    deactivate InventorySystem
+    ShippingProcessorJava -> InventoryManagerJava : 9. Decrease Stock Quantity (Shipped Amount)
+    InventoryManagerJava --> ShippingProcessorJava : Decrease Complete
+    deactivate InventoryManagerJava
 
     ' 10. The system automatically sends a shipping completion email including the tracking number to the customer.
-    ShippingProcessor -> MailSystem : 10. Send Shipping Complete Email (Tracking Number)
-    activate MailSystem
-    MailSystem --> ShippingProcessor : Send Complete
-    deactivate MailSystem
+    ShippingProcessorJava -> MailServiceJava : 10. Send Shipping Complete Email (Tracking Number)
+    activate MailServiceJava
+    MailServiceJava --> ShippingProcessorJava : Send Complete
+    deactivate MailServiceJava
 
-    Database --> ShippingProcessor : Update Complete
-    deactivate Database
+    ShippingDBJava --> ShippingProcessorJava : Update Complete
+    deactivate ShippingDBJava
     
     ' Post-condition: Update screen display and return to list.
-    deactivate ShippingProcessor
-    ShippingInstructionScreen --> LogisticsStaff : Processing Complete Notification
-    deactivate ShippingInstructionScreen
+    deactivate ShippingProcessorJava
+    ShippingInstructionJSP --> LogisticsStaff : Processing Complete Notification
+    deactivate ShippingInstructionJSP
 
 end ' Close Alternative Flow 2 alt
 end ' Close Alternative Flow 1 alt

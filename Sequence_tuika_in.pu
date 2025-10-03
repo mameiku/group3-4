@@ -5,63 +5,63 @@
 ' Participant Definitions
 ' ====================================================================
 actor User
-boundary GoodsDetailJSP as "Product Detail Screen"
-control AddCartJSP as "Add to Cart Controller"
-control CustomerJava as "Customer Service"
-control GoodsJava as "Product Service"
-control CartJava as "Cart Service"
-boundary AddCartCompleteJSP as "Cart Complete Screen"
-boundary ErrorJSP as "Error Screen"
+boundary ProductDetailJSP as "ProductDetail.jsp"
+control AddToCartJSP as "AddToCart.jsp"
+control CustomerServiceJava as "CustomerService.java"
+control ProductServiceJava as "ProductService.java"
+control CartServiceJava as "CartService.java"
+boundary CartCompleteJSP as "CartComplete.jsp"
+boundary ErrorJSP as "Error.jsp"
 
 ' ====================================================================
 ' Basic Flow: User is already logged in
 ' ====================================================================
 
 ' 1. The customer specifies the quantity on the product detail screen and selects 'Add to Cart'.
-User -> GoodsDetailJSP : 1. Select 'Add to Cart' (Product ID, Quantity)
-activate GoodsDetailJSP
+User -> ProductDetailJSP : 1. Select 'Add to Cart' (Product ID, Quantity)
+activate ProductDetailJSP
 
-GoodsDetailJSP -> AddCartJSP : Cart Add Request (Product ID, Quantity)
-deactivate GoodsDetailJSP
-activate AddCartJSP
+ProductDetailJSP -> AddToCartJSP : Cart Add Request (Product ID, Quantity)
+deactivate ProductDetailJSP
+activate AddToCartJSP
 
 ' --- Login Check (Implicit, handled by Session/Customer Service) ---
 ' Note: Assuming the user is already authenticated (Pre-condition).
-AddCartJSP -> CustomerJava : Get Login Information()
-activate CustomerJava
-CustomerJava --> AddCartJSP : Login Information (Logged In User)
-deactivate CustomerJava
+AddToCartJSP -> CustomerServiceJava : Get Login Information()
+activate CustomerServiceJava
+CustomerServiceJava --> AddToCartJSP : Login Information (Logged In User)
+deactivate CustomerServiceJava
 
 ' 2. The system checks the stock information and confirms that the specified quantity can be purchased.
-AddCartJSP -> GoodsJava : 2. Check Stock (Product ID, Quantity)
-activate GoodsJava
-GoodsJava --> AddCartJSP : Stock Information (Sufficient)
-deactivate GoodsJava
+AddToCartJSP -> ProductServiceJava : 2. Check Stock (Product ID, Quantity)
+activate ProductServiceJava
+ProductServiceJava --> AddToCartJSP : Stock Information (Sufficient)
+deactivate ProductServiceJava
 
 alt [Insufficient Stock]
     ' Alternative Flow: Insufficient stock
-    AddCartJSP -> ErrorJSP : Redirect to Error Screen
+    AddToCartJSP -> ErrorJSP : Redirect to Error Screen
     activate ErrorJSP
     ErrorJSP --> User : Display Error Message ("Stock is insufficient")
     deactivate ErrorJSP
     
 else [Stock Sufficient]
     ' 3. If there is stock, the system adds the product and quantity to the cart.
-    AddCartJSP -> CartJava : 3. Add Product to Cart (Product ID, Quantity, User ID)
-    activate CartJava
-    CartJava --> AddCartJSP : Addition Successful
-    deactivate CartJava
+    AddToCartJSP -> CartServiceJava : 3. Add Product to Cart (Product ID, Quantity, User ID)
+    activate CartServiceJava
+    CartServiceJava --> AddToCartJSP : Addition Successful
+    deactivate CartServiceJava
     
     ' 4. The system displays a confirmation message "Product has been added to the cart."
-    AddCartJSP -> AddCartCompleteJSP : 4. Display Confirmation Message
-    activate AddCartCompleteJSP
+    AddToCartJSP -> CartCompleteJSP : 4. Display Confirmation Message
+    activate CartCompleteJSP
     
     ' 5. The customer can either continue shopping or navigate to the cart screen.
-    AddCartCompleteJSP --> User : Confirmation Message Display
-    deactivate AddCartCompleteJSP
+    CartCompleteJSP --> User : Confirmation Message Display
+    deactivate CartCompleteJSP
     
 end
 
-deactivate AddCartJSP
+deactivate AddToCartJSP
 
 @enduml
