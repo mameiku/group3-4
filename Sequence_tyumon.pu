@@ -1,56 +1,106 @@
-@startuml .
+@startuml OrderSequenceDiagram
 !theme toy
 
-actor 顧客
-participant "注文画面\n: Boundary" as Boundary_OrderForm
-participant "注文制御\n: Control" as Control_Order
-participant "決済制御\n: Control" as Control_Payment
-boundary "決済システム\n: External" as External_Payment
-database "注文データ\n: Entity" as Entity_Order
-database "商品データ\n: Entity" as Entity_Product
-participant "通知サービス\n: System" as Service_Notification
+' ====================================================================
+' Participant Definitions (Based on Use Case Description)
+' ====================================================================
+actor Customer
+boundary ShoppingCartPage as "Shopping Cart Page"
+boundary OrderForm as "Order Form"
+control OrderProcessor as "Order Processor"
+control PaymentSystem as "Payment System"
+database Database as "Database"
+boundary OrderCompletePage as "Order Complete Page"
+control MailSystem as "Mail Sending System"
 
-' 1-4. 注文確定まで (画面操作)
-顧客 -> Boundary_OrderForm : 1-4. 注文情報を入力し[確定]
-activate Boundary_OrderForm
+' ====================================================================
+' Basic Flow
+' ====================================================================
 
-' 5. 注文制御開始 (検証を含む)
-Boundary_OrderForm -> Control_Order : 5. 注文確定要求
-deactivate Boundary_OrderForm
-activate Control_Order
+' 1. The customer clicks the "Proceed to Checkout" button on the shopping cart page.
+Customer -> ShoppingCartPage : 1. Click "Proceed to Checkout"
+activate ShoppingCartPage
 
-' 6-7. 決済連携
-Control_Order -> Control_Payment : 6. 決済処理要求
-activate Control_Payment
-Control_Payment -> External_Payment : 6.1. 支払い実行
-activate External_Payment
-External_Payment --> Control_Payment : 7. 決済完了通知
-deactivate External_Payment
-Control_Payment --> Control_Order : 7.1. 決済完了報告
-deactivate Control_Payment
+ShoppingCartPage -> OrderForm : Order Form Request
+deactivate ShoppingCartPage
+activate OrderForm
 
-' 8. 注文情報の確定・登録
-Control_Order -> Entity_Order : 8. 注文情報登録
-activate Entity_Order
-Entity_Order --> Control_Order : 8.1. 登録完了
-deactivate Entity_Order
+' 2. The system displays the order form.
+OrderForm --> Customer : 2. Display Form()
 
-' 9. 在庫数の更新（実在庫減算）
-Control_Order -> Entity_Product : 9. 実在庫数更新(減算)
-activate Entity_Product
-Entity_Product --> Control_Order : 9.1. 更新完了
-deactivate Entity_Product
+' 3. The customer enters information and confirms the order details (local operation).
+Note over Customer, OrderForm : 3. Enter shipping, payment, and delivery method\n and confirm order details (Local Processing)
 
-' 10. 注文完了画面表示とメール送信
-Control_Order -> Service_Notification : 10.1. 注文確認メール送信
-activate Service_Notification
-Service_Notification --> Control_Order : 10.2. 送信完了
-deactivate Service_Notification
+' 4. The customer clicks the "Confirm Order" button.
+Customer -> OrderForm : 4. Click "Confirm Order"
 
-Control_Order -> Boundary_OrderForm : 10.3. 注文完了表示要求
-deactivate Control_Order
-activate Boundary_OrderForm
+' 5. The system validates the order content based on the entered information.
+OrderForm -> OrderProcessor : 5. Validate Order Info()
+activate OrderProcessor
+OrderProcessor --> OrderForm : Validation Result()
 
-Boundary_OrderForm -> 顧客 : 11. 注文完了画面を表示
-deactivate Boundary_OrderForm
+' --- Alternate Flow 1: Insufficient Stock ---
+alt [Insufficient Stock]
+    OrderProcessor -> Database : Check Stock()
+    Database --> OrderProcessor : Stock Info (Insufficient)
+    OrderProcessor -> OrderForm : Display Error Message("Stock is insufficient")
+    deactivate OrderProcessor
+    
+    OrderForm --> Customer : 2. Display Error, Stop Purchase Process
+
+    Note over Customer, OrderForm : Customer reviews and potentially removes items from the cart
+    ' deactivate OrderForm ' **Removed error line**
+
+else [Stock Available]
+    ' 6. The system links information to the payment system based on the selected payment method.
+    OrderProcessor -> PaymentSystem : 6. Payment System Linkage()
+    activate PaymentSystem
+
+    ' 7. The system receives a payment completion notification from the payment system.
+    PaymentSystem --> OrderProcessor : 7. Payment Result Notification (Success/Failure)
+
+    ' --- Alternate Flow 2: Payment Registration Failed ---
+    alt [Payment Registration Failed]
+        OrderProcessor -> OrderForm : Display Payment Error Message
+        deactivate PaymentSystem
+        deactivate OrderProcessor
+        OrderForm --> Customer : Display Error (Request for Re-entry)
+        Note over Customer, OrderForm : Re-enter payment information after a while
+        ' deactivate OrderForm ' **Commented out error line**
+
+    else [Payment Successful]
+        ' 8. The system finalizes the order and registers the order information in the database.
+        OrderProcessor -> Database : 8. Register Order Info()
+        activate Database
+        Database --> OrderProcessor : Registration Complete
+        deactivate Database
+
+        ' 9. The system appends to the customer's payment history (database operation).
+        OrderProcessor -> Database : 9. Append Payment History()
+
+        ' 10. The system updates the stock count of the ordered products.
+        OrderProcessor -> Database : 10. Update Stock Count()
+
+        ' 11. The system deletes the cart information for the ordered products.
+        OrderProcessor -> Database : 11. Delete Cart Info()
+        Database --> OrderProcessor : Deletion Complete
+
+        ' 12. Displays the order complete screen and sends an order confirmation email.
+        OrderProcessor -> OrderCompletePage : 12. Display Order Complete Page()
+        activate OrderCompletePage
+
+        OrderProcessor -> MailSystem : 12. Send Order Confirmation Email()
+        activate MailSystem
+        MailSystem --> OrderProcessor : Sending Complete
+        deactivate MailSystem
+
+        deactivate OrderProcessor
+        OrderCompletePage --> Customer : 12. Display Order Complete Page
+        deactivate OrderCompletePage
+        ' deactivate OrderForm ' **Basic Flow lifeline end**
+    end ' Close Payment Result alt
+end ' Close Stock Check alt
+
+' deactivate OrderForm ' Original deleted line
+
 @enduml
