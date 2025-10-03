@@ -1,106 +1,114 @@
-@startuml OrderSequenceDiagram
+@startuml ShippingPreparationSequenceDiagram
 !theme toy
 
 ' ====================================================================
 ' Participant Definitions (Based on Use Case Description)
 ' ====================================================================
-actor Customer
-boundary ShoppingCartPage as "Shopping Cart Page"
-boundary OrderForm as "Order Form"
-control OrderProcessor as "Order Processor"
-control PaymentSystem as "Payment System"
+actor LogisticsStaff as "Logistics Staff"
+boundary ShippingListScreen as "Shipping Waitlist Screen"
+boundary ShippingInstructionScreen as "Shipping Instruction Screen"
+control ShippingProcessor as "Shipping Processor"
+control InventorySystem as "Inventory System"
 database Database as "Database"
-boundary OrderCompletePage as "Order Complete Page"
-control MailSystem as "Mail Sending System"
+control MailSystem as "Shipping Email System"
 
 ' ====================================================================
 ' Basic Flow
 ' ====================================================================
 
-' 1. The customer clicks the "Proceed to Checkout" button on the shopping cart page.
-Customer -> ShoppingCartPage : 1. Click "Proceed to Checkout"
-activate ShoppingCartPage
+' 1. Logistics staff navigates from the management screen to the "Shipping Waitlist".
+LogisticsStaff -> ShippingListScreen : 1. Navigate to Shipping Waitlist
+activate ShippingListScreen
 
-ShoppingCartPage -> OrderForm : Order Form Request
-deactivate ShoppingCartPage
-activate OrderForm
+' 2. The system selects an order awaiting shipment and displays "Shipping Instructions".
+ShippingListScreen -> ShippingInstructionScreen : Display Instruction Request (Order Data)
+deactivate ShippingListScreen
+activate ShippingInstructionScreen
 
-' 2. The system displays the order form.
-OrderForm --> Customer : 2. Display Form()
+ShippingInstructionScreen --> LogisticsStaff : 2. Display Shipping Instructions()
 
-' 3. The customer enters information and confirms the order details (local operation).
-Note over Customer, OrderForm : 3. Enter shipping, payment, and delivery method\n and confirm order details (Local Processing)
+' 3. The system executes the shipping process based on the order and creates a picking list.
+ShippingInstructionScreen -> ShippingProcessor : 3. Execute Shipping Process (Order Data)
+activate ShippingProcessor
 
-' 4. The customer clicks the "Confirm Order" button.
-Customer -> OrderForm : 4. Click "Confirm Order"
+ShippingProcessor -> InventorySystem : 3. Request Picking List
+activate InventorySystem
+InventorySystem --> ShippingProcessor : Picking List
 
-' 5. The system validates the order content based on the entered information.
-OrderForm -> OrderProcessor : 5. Validate Order Info()
-activate OrderProcessor
-OrderProcessor --> OrderForm : Validation Result()
+' 4. The actor gathers physical goods from the warehouse based on the picking list.
+Note over LogisticsStaff, ShippingProcessor : 4. Gather physical goods based on picking list
 
-' --- Alternate Flow 1: Insufficient Stock ---
+' 5. The actor inspects and packs the goods.
+Note over LogisticsStaff : 5. Perform inspection and packaging
+
+' 6. The actor issues the shipping slip and enters the tracking number into the system.
+LogisticsStaff -> ShippingInstructionScreen : 6. Enter Tracking Number
+ShippingInstructionScreen -> ShippingProcessor : Register Tracking Number()
+
+' --- Alternative Flow 1: Cannot ship due to insufficient stock (Fork at Basic Flow 3) ---
 alt [Insufficient Stock]
-    OrderProcessor -> Database : Check Stock()
-    Database --> OrderProcessor : Stock Info (Insufficient)
-    OrderProcessor -> OrderForm : Display Error Message("Stock is insufficient")
-    deactivate OrderProcessor
+    ' Basic Flow 3. System checks stock.
+    ShippingProcessor -> InventorySystem : Check Stock()
+    InventorySystem --> ShippingProcessor : Stock Info (Insufficient)
     
-    OrderForm --> Customer : 2. Display Error, Stop Purchase Process
+    ' Alt 1-1. System detects insufficient stock during processing.
+    ShippingProcessor -> ShippingInstructionScreen : Insufficient Stock Error Display
+    
+    ' Alt 1-2. System updates the order status to "Insufficient Stock".
+    ShippingProcessor -> Database : Update Order Status ("Insufficient Stock")
+    activate Database
+    Database --> ShippingProcessor : Update Complete
+    deactivate Database
 
-    Note over Customer, OrderForm : Customer reviews and potentially removes items from the cart
-    ' deactivate OrderForm ' **Removed error line**
+    ' Alt 1-3. Display warning message to the actor.
+    ShippingInstructionScreen --> LogisticsStaff : Insufficient Stock Warning
 
-else [Stock Available]
-    ' 6. The system links information to the payment system based on the selected payment method.
-    OrderProcessor -> PaymentSystem : 6. Payment System Linkage()
-    activate PaymentSystem
+    deactivate InventorySystem
+    deactivate ShippingProcessor
+    deactivate ShippingInstructionScreen
 
-    ' 7. The system receives a payment completion notification from the payment system.
-    PaymentSystem --> OrderProcessor : 7. Payment Result Notification (Success/Failure)
+' --- Alternative Flow 2: Invalid format for tracking number (Fork at Basic Flow 6) ---
+alt [Invalid Tracking Number]
+    ShippingProcessor -> ShippingInstructionScreen : Validate Tracking Number()
+    ShippingInstructionScreen -> ShippingProcessor : Validation Result (Invalid)
 
-    ' --- Alternate Flow 2: Payment Registration Failed ---
-    alt [Payment Registration Failed]
-        OrderProcessor -> OrderForm : Display Payment Error Message
-        deactivate PaymentSystem
-        deactivate OrderProcessor
-        OrderForm --> Customer : Display Error (Request for Re-entry)
-        Note over Customer, OrderForm : Re-enter payment information after a while
-        ' deactivate OrderForm ' **Commented out error line**
+    ' Alt 2-1. System displays an error message.
+    ShippingProcessor -> ShippingInstructionScreen : Error Message Display ("Invalid tracking number format")
+    deactivate ShippingProcessor
+    ShippingInstructionScreen --> LogisticsStaff : Invalid Tracking Number Error
+    
+    Note over LogisticsStaff : Staff confirms/enters correct tracking number and\nclicks "Shipment Complete" again (Returns to Basic Flow)
+    deactivate ShippingInstructionScreen
+    
+else [No Issues]
+    ' 7. The actor selects the "Shipment Complete" button.
+    LogisticsStaff -> ShippingInstructionScreen : 7. Select "Shipment Complete"
+    ShippingInstructionScreen -> ShippingProcessor : Finalize Order (Tracking Number)
+    
+    ' 8. The system updates the order status to "Shipment Complete".
+    ShippingProcessor -> Database : 8. Update Order Status ("Shipment Complete")
+    activate Database
 
-    else [Payment Successful]
-        ' 8. The system finalizes the order and registers the order information in the database.
-        OrderProcessor -> Database : 8. Register Order Info()
-        activate Database
-        Database --> OrderProcessor : Registration Complete
-        deactivate Database
+    ' 9. The system reduces the stock quantity of the shipped goods.
+    ShippingProcessor -> InventorySystem : 9. Decrease Stock Quantity (Shipped Amount)
+    InventorySystem --> ShippingProcessor : Decrease Complete
+    deactivate InventorySystem
 
-        ' 9. The system appends to the customer's payment history (database operation).
-        OrderProcessor -> Database : 9. Append Payment History()
+    ' 10. The system automatically sends a shipping completion email including the tracking number to the customer.
+    ShippingProcessor -> MailSystem : 10. Send Shipping Complete Email (Tracking Number)
+    activate MailSystem
+    MailSystem --> ShippingProcessor : Send Complete
+    deactivate MailSystem
 
-        ' 10. The system updates the stock count of the ordered products.
-        OrderProcessor -> Database : 10. Update Stock Count()
+    Database --> ShippingProcessor : Update Complete
+    deactivate Database
+    
+    ' Post-condition: Update screen display and return to list.
+    deactivate ShippingProcessor
+    ShippingInstructionScreen --> LogisticsStaff : Processing Complete Notification
+    deactivate ShippingInstructionScreen
 
-        ' 11. The system deletes the cart information for the ordered products.
-        OrderProcessor -> Database : 11. Delete Cart Info()
-        Database --> OrderProcessor : Deletion Complete
-
-        ' 12. Displays the order complete screen and sends an order confirmation email.
-        OrderProcessor -> OrderCompletePage : 12. Display Order Complete Page()
-        activate OrderCompletePage
-
-        OrderProcessor -> MailSystem : 12. Send Order Confirmation Email()
-        activate MailSystem
-        MailSystem --> OrderProcessor : Sending Complete
-        deactivate MailSystem
-
-        deactivate OrderProcessor
-        OrderCompletePage --> Customer : 12. Display Order Complete Page
-        deactivate OrderCompletePage
-        ' deactivate OrderForm ' **Basic Flow lifeline end**
-    end ' Close Payment Result alt
-end ' Close Stock Check alt
-
-' deactivate OrderForm ' Original deleted line
+end ' Close Alternative Flow 2 alt
+end ' Close Alternative Flow 1 alt
 
 @enduml
