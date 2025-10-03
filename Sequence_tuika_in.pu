@@ -4,7 +4,7 @@
 ' ====================================================================
 ' Participant Definitions
 ' ====================================================================
-actor User
+actor User as "顧客"
 boundary ProductDetailJSP as "ProductDetail.jsp"
 control AddToCartJSP as "AddToCart.jsp"
 control CustomerServiceJava as "CustomerService.java"
@@ -14,50 +14,50 @@ boundary CartCompleteJSP as "CartComplete.jsp"
 boundary ErrorJSP as "Error.jsp"
 
 ' ====================================================================
-' Basic Flow: User is already logged in
+' Basic Flow: User is already logged in (基本フロー: ログイン済み)
 ' ====================================================================
 
-' 1. The customer specifies the quantity on the product detail screen and selects 'Add to Cart'.
-User -> ProductDetailJSP : 1. Select 'Add to Cart' (Product ID, Quantity)
+' 1. 顧客は、商品詳細画面で数量を指定し、「カートに追加」を選択する
+User -> ProductDetailJSP : 1. 「カートに追加」を選択 (商品ID, 数量)
 activate ProductDetailJSP
 
-ProductDetailJSP -> AddToCartJSP : Cart Add Request (Product ID, Quantity)
+ProductDetailJSP -> AddToCartJSP : カート追加リクエスト (商品ID, 数量)
 deactivate ProductDetailJSP
 activate AddToCartJSP
 
-' --- Login Check (Implicit, handled by Session/Customer Service) ---
-' Note: Assuming the user is already authenticated (Pre-condition).
-AddToCartJSP -> CustomerServiceJava : Get Login Information()
+' --- ログインチェック (暗黙的、セッション/顧客サービスによって処理される) ---
+' Note: ユーザーは認証済みであることを前提とする（事前条件）。
+AddToCartJSP -> CustomerServiceJava : ログイン情報を取得()
 activate CustomerServiceJava
-CustomerServiceJava --> AddToCartJSP : Login Information (Logged In User)
+CustomerServiceJava --> AddToCartJSP : ログイン情報 (ログイン済みユーザー)
 deactivate CustomerServiceJava
 
-' 2. The system checks the stock information and confirms that the specified quantity can be purchased.
-AddToCartJSP -> ProductServiceJava : 2. Check Stock (Product ID, Quantity)
+' 2. システムは在庫情報を確認し、指定された数量が購入可能か検証する。
+AddToCartJSP -> ProductServiceJava : 2. 在庫チェック (商品ID, 数量)
 activate ProductServiceJava
-ProductServiceJava --> AddToCartJSP : Stock Information (Sufficient)
+ProductServiceJava --> AddToCartJSP : 在庫情報 (十分)
 deactivate ProductServiceJava
 
-alt [Insufficient Stock]
-    ' Alternative Flow: Insufficient stock
-    AddToCartJSP -> ErrorJSP : Redirect to Error Screen
+alt [在庫不足]
+    ' 代替フロー: 在庫不足
+    AddToCartJSP -> ErrorJSP : エラー画面へリダイレクト
     activate ErrorJSP
-    ErrorJSP --> User : Display Error Message ("Stock is insufficient")
+    ErrorJSP --> User : エラーメッセージ表示("在庫が不足しています")
     deactivate ErrorJSP
     
-else [Stock Sufficient]
-    ' 3. If there is stock, the system adds the product and quantity to the cart.
-    AddToCartJSP -> CartServiceJava : 3. Add Product to Cart (Product ID, Quantity, User ID)
+else [在庫十分]
+    ' 3. 在庫があれば、システムは商品と数量をカートに追加する。
+    AddToCartJSP -> CartServiceJava : 3. カートに商品を追加 (商品ID, 数量, ユーザーID)
     activate CartServiceJava
-    CartServiceJava --> AddToCartJSP : Addition Successful
+    CartServiceJava --> AddToCartJSP : 追加成功
     deactivate CartServiceJava
     
-    ' 4. The system displays a confirmation message "Product has been added to the cart."
-    AddToCartJSP -> CartCompleteJSP : 4. Display Confirmation Message
+    ' 4. システムは「商品がカートに追加されました」という確認メッセージを表示する。
+    AddToCartJSP -> CartCompleteJSP : 4. 確認メッセージ表示
     activate CartCompleteJSP
     
-    ' 5. The customer can either continue shopping or navigate to the cart screen.
-    CartCompleteJSP --> User : Confirmation Message Display
+    ' 5. 顧客は買い物を続けるか、カート画面に移動できる。
+    CartCompleteJSP --> User : 確認メッセージを表示
     deactivate CartCompleteJSP
     
 end

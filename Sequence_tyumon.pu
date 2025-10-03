@@ -4,7 +4,7 @@
 ' ====================================================================
 ' Participant Definitions (Using .jsp and .java notation)
 ' ====================================================================
-actor LogisticsStaff as "Logistics Staff"
+actor LogisticsStaff as "物流担当者"
 boundary ShippingListJSP as "ShippingList.jsp"
 boundary ShippingInstructionJSP as "ShippingInstruction.jsp"
 control ShippingProcessorJava as "ShippingProcessor.java"
@@ -13,102 +13,103 @@ database ShippingDBJava as "ShippingDB.java"
 control MailServiceJava as "MailService.java"
 
 ' ====================================================================
-' Basic Flow
+' Basic Flow (基本フロー)
 ' ====================================================================
 
-' 1. Logistics staff navigates from the management screen to the "Shipping Waitlist".
-LogisticsStaff -> ShippingListJSP : 1. Navigate to Shipping Waitlist
+' 1. 物流担当者は、出荷管理画面から「出荷待ちリスト」へ遷移する
+LogisticsStaff -> ShippingListJSP : 1. 出荷待ちリストへ遷移
 activate ShippingListJSP
 
-' 2. The system selects an order awaiting shipment and displays "Shipping Instructions".
-ShippingListJSP -> ShippingInstructionJSP : Display Instruction Request (Order Data)
+' 2. システムは出荷待ちの注文を選び、「出荷指示」を表示する
+ShippingListJSP -> ShippingInstructionJSP : 出荷指示表示リクエスト(注文データ)
 deactivate ShippingListJSP
 activate ShippingInstructionJSP
 
-ShippingInstructionJSP --> LogisticsStaff : 2. Display Shipping Instructions()
+ShippingInstructionJSP --> LogisticsStaff : 2. 出荷指示を表示()
 
-' 3. The system executes the shipping process based on the order and creates a picking list.
-ShippingInstructionJSP -> ShippingProcessorJava : 3. Execute Shipping Process (Order Data)
+' 3. システムは、注文内容に基づき出荷処理を実行し、ピッキングリストを作成する
+ShippingInstructionJSP -> ShippingProcessorJava : 3. 出荷処理実行(注文データ)
 activate ShippingProcessorJava
 
-ShippingProcessorJava -> InventoryManagerJava : 3. Request Picking List
+ShippingProcessorJava -> InventoryManagerJava : 3. ピッキングリスト作成要求
 activate InventoryManagerJava
-InventoryManagerJava --> ShippingProcessorJava : Picking List
+InventoryManagerJava --> ShippingProcessorJava : ピッキングリスト
 
-' 4. The actor gathers physical goods from the warehouse based on the picking list.
-Note over LogisticsStaff, ShippingProcessorJava : 4. Gather physical goods based on picking list
+' 4. アクターは、ピッキングリストを基に、倉庫から現物商品を集める
+Note over LogisticsStaff, ShippingProcessorJava : 4. ピッキングリストを基に現物商品を集める
 
-' 5. The actor inspects and packs the goods.
-Note over LogisticsStaff : 5. Perform inspection and packaging
+' 5. アクターは、商品の検品と梱包作業を行う
+Note over LogisticsStaff : 5. 検品と梱包作業を行う
 
-' 6. The actor issues the shipping slip and enters the tracking number into the system.
-LogisticsStaff -> ShippingInstructionJSP : 6. Enter Tracking Number
-ShippingInstructionJSP -> ShippingProcessorJava : Register Tracking Number()
+' 6. アクターは、配送伝票の発行と追跡番号をシステムに入力する
+LogisticsStaff -> ShippingInstructionJSP : 6. 追跡番号を入力
+ShippingInstructionJSP -> ShippingProcessorJava : 追跡番号登録()
 
-' --- Alternative Flow 1: Cannot ship due to insufficient stock (Fork at Basic Flow 3) ---
-alt [Insufficient Stock]
+' --- Alternative Flow 1: Cannot ship due to insufficient stock (代替フロー 1: 在庫不足) ---
+alt [在庫不足]
     ' Basic Flow 3. System checks stock.
-    ShippingProcessorJava -> InventoryManagerJava : Check Stock()
-    InventoryManagerJava --> ShippingProcessorJava : Stock Info (Insufficient)
+    ShippingProcessorJava -> InventoryManagerJava : 在庫チェック()
+    InventoryManagerJava --> ShippingProcessorJava : 在庫情報(不足)
     
-    ' Alt 1-1. System detects insufficient stock during processing.
-    ShippingProcessorJava -> ShippingInstructionJSP : Insufficient Stock Error Display
+    ' Alt 1-1. システムは、出荷処理時に対象商品の在庫が不足していることを検知する
+    ShippingProcessorJava -> ShippingInstructionJSP : 在庫不足エラー表示
     
-    ' Alt 1-2. System updates the order status to "Insufficient Stock".
-    ShippingProcessorJava -> ShippingDBJava : Update Order Status ("Insufficient Stock")
+    ' Alt 1-2. システムは、当該注文を「在庫不足」ステータスに更新
+    ShippingProcessorJava -> ShippingDBJava : 注文ステータス更新("在庫不足")
     activate ShippingDBJava
-    ShippingDBJava --> ShippingProcessorJava : Update Complete
+    ShippingDBJava --> ShippingProcessorJava : 更新完了
     deactivate ShippingDBJava
 
-    ' Alt 1-3. Display warning message to the actor.
-    ShippingInstructionJSP --> LogisticsStaff : Insufficient Stock Warning
+    ' Alt 1-3. アクターに警告メッセージを表示
+    ShippingInstructionJSP --> LogisticsStaff : 在庫不足警告メッセージ表示
 
     deactivate InventoryManagerJava
     deactivate ShippingProcessorJava
     deactivate ShippingInstructionJSP
 
-' --- Alternative Flow 2: Invalid format for tracking number (Fork at Basic Flow 6) ---
-alt [Invalid Tracking Number]
-    ShippingProcessorJava -> ShippingInstructionJSP : Validate Tracking Number()
-    ShippingInstructionJSP -> ShippingProcessorJava : Validation Result (Invalid)
+else [在庫あり（代替フロー2へ進む）]
+' --- Alternative Flow 2: Invalid format for tracking number (代替フロー 2: 配送番号不正) ---
+alt [配送番号不正]
+    ShippingProcessorJava -> ShippingInstructionJSP : 追跡番号検証()
+    ShippingInstructionJSP -> ShippingProcessorJava : 検証結果(不正)
 
-    ' Alt 2-1. System displays an error message.
-    ShippingProcessorJava -> ShippingInstructionJSP : Error Message Display ("Invalid tracking number format")
+    ' Alt 2-1. システムは、エラーメッセージを表示する
+    ShippingProcessorJava -> ShippingInstructionJSP : エラーメッセージ表示("追跡番号の形式が不正です")
     deactivate ShippingProcessorJava
-    ShippingInstructionJSP --> LogisticsStaff : Invalid Tracking Number Error
+    ShippingInstructionJSP --> LogisticsStaff : 追跡番号不正エラー表示
     
-    Note over LogisticsStaff : Staff confirms/enters correct tracking number and\nclicks "Shipment Complete" again (Returns to Basic Flow)
+    Note over LogisticsStaff : 担当者は正しい追跡番号を確認・入力し、\n再度「出荷完了」をクリックする (基本フローへ戻る)
     deactivate ShippingInstructionJSP
     
-else [No Issues]
-    ' 7. The actor selects the "Shipment Complete" button.
-    LogisticsStaff -> ShippingInstructionJSP : 7. Select "Shipment Complete"
-    ShippingInstructionJSP -> ShippingProcessorJava : Finalize Order (Tracking Number)
+else [問題なし]
+    ' 7. The actor selects the "Shipment Complete" button. (アクターは「出荷完了」ボタンを選択する)
+    LogisticsStaff -> ShippingInstructionJSP : 7. 「出荷完了」を選択
+    ShippingInstructionJSP -> ShippingProcessorJava : 注文確定(追跡番号)
     
-    ' 8. The system updates the order status to "Shipment Complete".
-    ShippingProcessorJava -> ShippingDBJava : 8. Update Order Status ("Shipment Complete")
+    ' 8. The system updates the order status to "Shipment Complete". (注文のステータスを「出荷完了」に更新する)
+    ShippingProcessorJava -> ShippingDBJava : 8. 注文ステータス更新("出荷完了")
     activate ShippingDBJava
 
-    ' 9. The system reduces the stock quantity of the shipped goods.
-    ShippingProcessorJava -> InventoryManagerJava : 9. Decrease Stock Quantity (Shipped Amount)
-    InventoryManagerJava --> ShippingProcessorJava : Decrease Complete
+    ' 9. The system reduces the stock quantity of the shipped goods. (出荷された商品の在庫数を減算する)
+    ShippingProcessorJava -> InventoryManagerJava : 9. 在庫数減算(出荷数)
+    InventoryManagerJava --> ShippingProcessorJava : 減算完了
     deactivate InventoryManagerJava
 
-    ' 10. The system automatically sends a shipping completion email including the tracking number to the customer.
-    ShippingProcessorJava -> MailServiceJava : 10. Send Shipping Complete Email (Tracking Number)
+    ' 10. The system automatically sends a shipping completion email including the tracking number to the customer. (追跡番号を含む発送完了メールを顧客に自動送信する)
+    ShippingProcessorJava -> MailServiceJava : 10. 発送完了メール送信(追跡番号)
     activate MailServiceJava
-    MailServiceJava --> ShippingProcessorJava : Send Complete
+    MailServiceJava --> ShippingProcessorJava : 送信完了
     deactivate MailServiceJava
 
-    ShippingDBJava --> ShippingProcessorJava : Update Complete
+    ShippingDBJava --> ShippingProcessorJava : 更新完了
     deactivate ShippingDBJava
     
     ' Post-condition: Update screen display and return to list.
     deactivate ShippingProcessorJava
-    ShippingInstructionJSP --> LogisticsStaff : Processing Complete Notification
+    ShippingInstructionJSP --> LogisticsStaff : 処理完了通知
     deactivate ShippingInstructionJSP
 
-end ' Close Alternative Flow 2 alt
-end ' Close Alternative Flow 1 alt
+end ' 代替フロー 2 alt を閉じる
+end ' 代替フロー 1 alt を閉じる
 
 @enduml

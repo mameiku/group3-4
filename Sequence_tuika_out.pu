@@ -4,7 +4,7 @@
 ' ====================================================================
 ' Participant Definitions (Using .jsp and .java notation)
 ' ====================================================================
-actor User
+actor User as "顧客"
 boundary ProductDetailJSP as "ProductDetail.jsp"
 control AddToCartJSP as "AddToCart.jsp"
 control CustomerServiceJava as "CustomerService.java"
@@ -15,48 +15,48 @@ boundary CartCompleteJSP as "CartComplete.jsp"
 boundary ErrorJSP as "Error.jsp"
 
 ' ====================================================================
-' Basic Flow: User is logged out (Pre-condition is NOT met)
+' Basic Flow: User is logged out (基本フロー: ログアウト状態)
 ' ====================================================================
 
-' 1. The customer specifies the quantity on the product detail screen and selects 'Add to Cart'.
-User -> ProductDetailJSP : 1. Select 'Add to Cart' (Product ID, Quantity)
+' 1. 顧客は、商品詳細画面で数量を指定し、「カートに追加」を選択する
+User -> ProductDetailJSP : 1. 「カートに追加」を選択 (商品ID, 数量)
 activate ProductDetailJSP
 
-ProductDetailJSP -> AddToCartJSP : Cart Add Request (Product ID, Quantity)
+ProductDetailJSP -> AddToCartJSP : カート追加リクエスト (商品ID, 数量)
 deactivate ProductDetailJSP
 activate AddToCartJSP
 
-' --- Login Check ---
-' 2. The system confirms if the customer is logged in.
-AddToCartJSP -> CustomerServiceJava : Get Login Information()
+' --- ログインチェック ---
+' 2. システムは顧客がログインしているかを確認する。
+AddToCartJSP -> CustomerServiceJava : ログイン情報を取得()
 activate CustomerServiceJava
-CustomerServiceJava --> AddToCartJSP : Login Information (Logged Out User / Null)
+CustomerServiceJava --> AddToCartJSP : ログイン情報 (未ログインユーザー / Null)
 deactivate CustomerServiceJava
 
-alt [User is Logged Out]
-    ' Alternative Flow 2-1: If the customer is not logged in, the system confirms this.
-    ' Alternative Flow 2-2: The system redirects to the Login Screen.
-    AddToCartJSP -> LoginJSP : Redirect to Login Screen
+alt [未ログイン]
+    ' 代替フロー 2-1: 顧客がログインしていない場合、システムはそれを確認する。
+    ' 代替フロー 2-2: システムはログイン画面へリダイレクトする。
+    AddToCartJSP -> LoginJSP : ログイン画面へリダイレクト
     activate LoginJSP
     
-    LoginJSP --> User : Display Login Screen
+    LoginJSP --> User : ログイン画面を表示
     
-    Note right : User performs the 'Login' Use Case here.\nUpon successful login, they will be redirected to the Cart/Product.
+    Note right : ユーザーはここで「ログイン」ユースケースを実行する。\nログイン成功後、カート/商品ページへリダイレクトされる。
     
     deactivate LoginJSP
     
-else [User is Logged In (Fallback)]
-    ' This path represents the original Basic Flow, which should not be triggered if the pre-condition is 'logged out'.
+else [ログイン済み（フォールバック）]
+    ' このパスは、本来の基本フロー（ログイン済み）を表すが、事前条件が「ログアウト」のため通常は発生しない。
     
-    ' 2. Check Stock
-    AddToCartJSP -> ProductServiceJava : Check Stock (Product ID, Quantity)
+    ' 2. 在庫チェック
+    AddToCartJSP -> ProductServiceJava : 在庫チェック (商品ID, 数量)
     activate ProductServiceJava
-    ProductServiceJava --> AddToCartJSP : Stock Information
+    ProductServiceJava --> AddToCartJSP : 在庫情報
     deactivate ProductServiceJava
     
-    ' ... followed by the rest of the Add to Cart logic ...
+    ' ... カート追加の残りのロジックが続く ...
     
-end ' End Login Check alt
+end ' ログインチェック alt を閉じる
 
 deactivate AddToCartJSP
 
